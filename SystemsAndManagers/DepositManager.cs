@@ -46,6 +46,11 @@ public class DepositManager : MonoBehaviour
                 EndDepositProcess();
             }
 
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                EmptyInventoryProcess();
+            }
+
             SelectionProcess();
             ItemTransferProcess();
         }
@@ -215,6 +220,23 @@ public class DepositManager : MonoBehaviour
         }
 
         return collected;
+    }
+
+        private void EmptyInventoryProcess()
+    {
+        int itemSlot = 0;
+
+        while (itemSlot < depositCap)
+        {
+            while (inventoryManager.TransferItem(itemSlot))
+            {
+                // Keep transferring items from the current slot until it's empty
+            }
+            itemSlot++;
+        }
+
+        depositUI.Observe();
+        inventoryManager.inventoryUI.Observe();
     }
 
     private void EndDepositProcess()

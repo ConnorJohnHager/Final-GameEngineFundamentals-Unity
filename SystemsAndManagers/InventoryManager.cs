@@ -73,6 +73,11 @@ public class InventoryManager : MonoBehaviour
 
     public bool TransferItem(int slotNumber)
     {
+        if (inventoryList[slotNumber].Count == 0)
+        {
+            return false; // No items to transfer
+        }
+
         bool collected = depositManager.CollectItem(inventoryList[slotNumber][0]);
 
         if (collected)
