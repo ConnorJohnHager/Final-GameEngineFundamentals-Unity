@@ -44,22 +44,26 @@ public class InventoryManager : MonoBehaviour
         {
             CollectableBase itemScript = item.GetComponent<CollectableBase>();
 
-            for (int i = 0; i < inventoryCap - 1; i++)
+            for (int i = 0; i < inventoryCap; i++)
+            {
+                if (inventoryList[i].Count > 0
+                    && inventoryList[i][0].GetComponent<CollectableBase>()
+                    && inventoryList[i][0].GetComponent<CollectableBase>().collectableType == itemScript.collectableType
+                    && inventoryList[i].Count < itemCap)
+                {
+                    inventoryList[i].Add(item);
+                    inventoryUI.Observe();
+                    return true;
+                }
+            }
+
+            for (int i = 0; i < inventoryCap; i++)
             {
                 if (inventoryList[i].Count == 0)
                 {
                     inventoryList[i].Add(item);
                     inventoryUI.Observe();
                     return true;
-                }
-                else if (inventoryList[i][0].GetComponent<CollectableBase>().collectableType == itemScript.collectableType)
-                {
-                    if (inventoryList[i].Count < itemCap)
-                    {
-                        inventoryList[i].Add(item);
-                        inventoryUI.Observe();
-                        return true;
-                    }
                 }
             }
         }

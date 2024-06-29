@@ -26,12 +26,12 @@ public class UI_InteractMessage : UIBase
     {
         if (depositManager.isInteractable)
         {
-            interactAlert.text = "Prese SPACE to open";
+            interactAlert.text = "Press SPACE to open";
             return;
         }
         else if (conversingManager.isConversable)
         {
-            interactAlert.text = "Prese SPACE to chat";
+            interactAlert.text = "Press SPACE to chat";
             return;
         }
         else if (collectingManager.isCollectable)

@@ -51,6 +51,11 @@ public class DepositManager : MonoBehaviour
                 EmptyInventoryProcess();
             }
 
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                EmptySlotProcess();
+            }
+
             SelectionProcess();
             ItemTransferProcess();
         }
@@ -100,18 +105,22 @@ public class DepositManager : MonoBehaviour
 
             for (int i = 0; i < depositCap - 1; i++)
             {
-                if (depositList[i].Count == 0)
+                if (depositList[i].Count > 0
+                    && depositList[i][0].GetComponent<CollectableBase>()
+                    && depositList[i][0].GetComponent<CollectableBase>().collectableType == itemScript.collectableType
+                    && depositList[i].Count < itemCap)
                 {
                     depositList[i].Add(item);
                     return true;
                 }
-                else if (depositList[i][0].GetComponent<CollectableBase>().collectableType == itemScript.collectableType)
+            }
+
+            for (int i = 0; i < depositCap - 1; i++)
+            {
+                if (depositList[i].Count == 0)
                 {
-                    if (depositList[i].Count < itemCap)
-                    {
-                        depositList[i].Add(item);
-                        return true;
-                    }
+                    depositList[i].Add(item);
+                    return true;
                 }
             }
         }
@@ -222,7 +231,7 @@ public class DepositManager : MonoBehaviour
         return collected;
     }
 
-        private void EmptyInventoryProcess()
+    private void EmptyInventoryProcess()
     {
         int itemSlot = 0;
 
@@ -239,6 +248,27 @@ public class DepositManager : MonoBehaviour
         inventoryManager.inventoryUI.Observe();
     }
 
+    private void EmptySlotProcess()
+    {
+        if (whichBox == 0)
+        {
+            while (inventoryManager.TransferItem(whichSlot))
+            {
+                depositUI.Observe();
+                inventoryManager.inventoryUI.Observe();
+            }
+        }
+        else if (whichBox == 1)
+        {
+            while (TransferItem(whichSlot))
+            {
+                depositUI.Observe();
+                inventoryManager.inventoryUI.Observe();
+                // For some reason this is the only position that will have the UI update correctly after a deposit slot is emptied
+            }
+        }
+    }
+
     private void EndDepositProcess()
     {
         depositUI.SelectionEnd();
@@ -247,7 +277,6 @@ public class DepositManager : MonoBehaviour
         whichSlot = 0;
         controlsManager.DepositEnded();
     }
-
 
     private void ProcessDepositedItems() // Not working correctly
     {
@@ -259,6 +288,7 @@ public class DepositManager : MonoBehaviour
                 {
                     depositSlot[i].SetActive(true);
                     taskManager.activeTask.UpdateTask(depositSlot[i]);
+                    Destroy(depositSlot[i]);
                 }
             }
         }

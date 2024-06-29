@@ -40,11 +40,12 @@ public class TSM_Cabbages : TimedSMBase
                     }
                 }
             }
-            else if (spawnTimer >= 30)
+            else if (spawnedObjects.Count < 1 && spawnTimer >= 30)
             {
                 almostCabbage.SetActive(false);
                 SpawnCabbage();
                 spawnTimer = 0;
+                return;
             }
         }
     }

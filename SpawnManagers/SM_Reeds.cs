@@ -15,15 +15,19 @@ public class SM_Reeds : SpawnManagerBase
 
     private void Update()
     {
-        if (spawnedObjects.Count < 1 && spawnTimer < 10)
+        if (spawnedObjects.Count < 1)
         {
-            spawnTimer += Time.deltaTime;
-
-        }
-        else if (spawnTimer >= 10)
-        {
-            SpawnReed();
-            spawnTimer = 0;
+            if (spawnTimer < 10)
+            {
+                spawnTimer += Time.deltaTime;
+                return;
+            }
+            else if (spawnTimer >= 10)
+            {
+                SpawnReed();
+                spawnTimer = 0;
+                return;
+            }
         }
     }
 
